@@ -1,4 +1,7 @@
 import React, { Component } from 'react'
+import {connect} from 'react-redux'
+import { Redirect } from 'react-router-dom'
+import {registrar} from '../../store/actions/autActions'
 
 class Registrar extends Component {
   state = {
@@ -16,10 +19,13 @@ class Registrar extends Component {
   
   GestionaEnvio = (e) => {
     e.preventDefault();
-    console.log(this.state);
+    //console.log(this.state);
+    this.props.registrar(this.state)
   }
   
   render() {
+    const { auth, authError } = this.props;
+    if (auth.uid) return <Redirect to='/' />
     return (
       <div className="container">
         <form onSubmit={this.GestionaEnvio} className="white">
@@ -42,11 +48,25 @@ class Registrar extends Component {
           </div>
           <div className="input-field">
             <button className="btn blue lighten-1 depth-10">Registrar</button>
-          </div>
+            <div className="red-text center">
+              { authError ? <p>{authError}</p> : null }
+            </div>          </div>
         </form>
       </div>
     )
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    auth: state.firebase.auth,
+    authError: state.aut.authError
+  }
+}
 
-export default Registrar
+const mapDispatchToProps = (dispatch) => {
+  return {
+    registrar: (nuevoUsuario) => dispatch(registrar(nuevoUsuario))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Registrar)

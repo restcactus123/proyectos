@@ -21,8 +21,8 @@ function App() {
         <Route path='/registrar' component={Registrar} />
         <Route path='/crearreserva' component={CrearReserva} />
         <Route path='/crearreservaadm' component={CrearReservaAdm} />
-        <Route path='/editarreserva' component={EditarReserva} />
-        <Route path='/editarreservaadm' component={EditarReservaAdm} />
+        <Route path='/editarreserva/:id' component={EditarReserva} />
+        <Route path='/editarreservaadm/:id' component={EditarReservaAdm} />
       </Switch>
     </BrowserRouter>
   );

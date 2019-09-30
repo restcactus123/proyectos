@@ -2,11 +2,19 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { firestoreConnect } from 'react-redux-firebase'
 import { compose } from 'redux'
+import {Redirect} from 'react-router-dom'
 
-
+  
 function DetalleReserva(props) {
+
+  
   const id = props.match.params.id;
-  const { reserva } = props;
+  const { reserva, auth } = props;
+  if (!auth.uid) return <Redirect to='/entrar' />
+  
+  if (auth.uid === 'xui9v6fvzjNUYI4jdf6BcytNIrp1') return <Redirect to={'/editarreservaadm/' + id} />
+  else return <Redirect to={'/editarreserva/' + id} />
+
   //console.log(props);
   if (reserva) {
     return(
@@ -14,11 +22,13 @@ function DetalleReserva(props) {
         <div className="card z-depth-10">
           <div className="card-content">
             <span className="card-title">Reserva {reserva.nombre} - {id}</span>
-            <p>Texto libre reserva para cliente</p>
+            <p>Observaciones: {reserva.obs}</p>
           </div>
           <div className="card-action gret lighten-4 grey-text">
-            <div>Cliente</div>
-            <div>Fecha</div>
+            <div>{reserva.email}</div>
+            <div>{reserva.fecha}</div>
+            <div>{reserva.hora}</div>
+            <div>{reserva.estado}</div>
           </div>
         </div>
       </div>
@@ -39,7 +49,8 @@ const mapStateToProps = (state, ownProps) => {
   const reservas = state.firestore.data.reservas;
   const reserva = reservas ? reservas[id] : null
   return {
-    reserva: reserva
+    reserva: reserva,
+    auth: state.firebase.auth
   }
 }
 

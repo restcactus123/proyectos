@@ -1,4 +1,7 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { crearReservaAdm } from '../../store/actions/reservaActions'
+import {Redirect} from 'react-router-dom'
 
 class CrearReservaAdm extends Component {
   state = {
@@ -8,9 +11,16 @@ class CrearReservaAdm extends Component {
     comensales: '',
     fecha: '',
     hora: '',
+    idCliente: '',
     obs: ''
   }
+
+  componentDidMount () {
+    this.refs.nombre.focus();
+
+  }
   
+
   GestionaCambio = (e) => {
     this.setState({
       [e.target.id] : e.target.value
@@ -19,17 +29,23 @@ class CrearReservaAdm extends Component {
   
   GestionaEnvio = (e) => {
     e.preventDefault();
-    console.log(this.state);
+    //console.log(this.state);
+    //console.log('GestionaEnvio')
+    this.props.crearReservaAdm(this.state);
+    this.props.history.push('/');
+
   }
   
   render() {
+    const {auth} = this.props;
+    if (!auth.uid) return <Redirect to='/entrar' />
     return (
       <div className="container">
         <form onSubmit={this.GestionaEnvio} className="white">
           <h5 className="grey-text text-darken-3">Crear Reserva Administrador</h5>
           <div className="input-field">
             <label htmlFor="nombre">Nombre</label>
-            <input type="text" id="nombre" onChange={this.GestionaCambio}/>
+            <input type="text" ref="nombre" id="nombre" onChange={this.GestionaCambio}/>
           </div>
           <div className="input-field">
             <label htmlFor="email">Email</label>
@@ -45,11 +61,15 @@ class CrearReservaAdm extends Component {
           </div>
           <div className="input-field">
             <label htmlFor="fecha">Fecha</label>
-            <input type="datetime" id="fecha" onChange={this.GestionaCambio}/>
+            <input type="date" id="fecha" onChange={this.GestionaCambio}/>
           </div>
           <div className="input-field">
             <label htmlFor="hora">Hora</label>
-            <input type="datetime" id="hora" onChange={this.GestionaCambio}/>
+            <input type="time" id="hora" onChange={this.GestionaCambio}/>
+          </div>
+          <div className="input-field">
+            <label htmlFor="idCliente">ID Cliente</label>
+            <input type="text" id="idCliente" onChange={this.GestionaCambio}/>
           </div>
           <div className="input-field">
             <label htmlFor="obs">Observaciones</label>
@@ -64,4 +84,16 @@ class CrearReservaAdm extends Component {
   }
 }
 
-export default CrearReservaAdm
+const mapStateToProps = (state) => {
+  return {
+    auth: state.firebase.auth
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    crearReservaAdm: (reserva) => dispatch(crearReservaAdm(reserva))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CrearReservaAdm)

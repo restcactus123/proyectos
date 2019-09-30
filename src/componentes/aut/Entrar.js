@@ -1,4 +1,7 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import {entrar} from '../../store/actions/autActions'
+import {Redirect} from 'react-router-dom'
 
 class Entrar extends Component {
   state = {
@@ -15,9 +18,12 @@ class Entrar extends Component {
   GestionaEnvio = (e) => {
     e.preventDefault();
     console.log(this.state);
+    this.props.entrar(this.state);
   }
   
   render() {
+    const { authError, auth } = this.props;
+    if (auth.uid) return <Redirect to='/' />
     return (
       <div className="container">
         <form onSubmit={this.GestionaEnvio} className="white">
@@ -32,6 +38,9 @@ class Entrar extends Component {
           </div>
           <div className="input-field">
             <button className="btn blue lighten-1 depth-10">Entrar</button>
+            <div className="red-text center">
+              { authError ? <p>{authError}</p> : null }
+            </div>
           </div>
         </form>
       </div>
@@ -39,4 +48,17 @@ class Entrar extends Component {
   }
 }
 
-export default Entrar
+const mapStateToProps = (state) => {
+  return {
+    authError: state.aut.authError,
+    auth: state.firebase.auth
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    entrar: (creds) => dispatch(entrar(creds))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Entrar)

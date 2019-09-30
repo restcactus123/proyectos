@@ -14,6 +14,24 @@ const resReducer = (state = initState, action) => {
     case 'CREAR_RESERVA_ERROR':
       console.log('error creando reserva', action.err);
       return state;
+    case 'CREAR_RESERVA_ADM':
+      console.log('reserva creada adm', action.reserva);
+      return state;
+    case 'CREAR_RESERVA_ADM_ERROR':
+      console.log('error creando reserva adm', action.err);
+      return state;
+    case 'EDITAR_RESERVA':
+      console.log('reserva editada', action.reserva);
+      return state;
+    case 'EDITAR_RESERVA_ERROR':
+      console.log('error editando reserva', action.err);
+      return state;
+    case 'EDITAR_RESERVA_ADM':
+      console.log('reserva editada adm', action.reserva);
+      return state;
+    case 'EDITAR_RESERVA_ADM_ERROR':
+      console.log('error editando adm', action.err);
+      return state;
     default:
       return state;
   }
