@@ -12,7 +12,7 @@ const Notif = (props) => {
               return (
                 <li key={item.id}>
                   <span className="red-text">{item.usuario}</span>
-                  <span>{item.contenido}</span>
+                  <span>-{item.contenido}</span>
                 </li>
               )
             })}

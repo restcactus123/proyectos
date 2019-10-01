@@ -54,7 +54,7 @@ export default compose(
   connect(mapStateToProps),
   firestoreConnect([
     { collection: 'reservas', orderBy: ['cuando'] },
-    {collection: 'notificaciones', limit: 10, orderBy: ['time']}
+    {collection: 'notificaciones', limit: 10, orderBy: ['hora']}
 //    { collection: 'reservas', where: ['idCliente', '==', 'nGefJAsNxPN77CZrvwLvCbMQhNw2'] }
   ])
 )(Panel)
